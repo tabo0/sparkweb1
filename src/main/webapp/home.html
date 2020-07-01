@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>home</title>
+
+    <link rel="icon" href="myico.ico" type="image/x-icon" />
+    <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <style>
+        table { table-layout: fixed;}
+        table tr td {
+            overflow:hidden;
+            white-space:nowrap;
+            text-overflow:ellipsis;
+            -o-text-overflow:ellipsis;
+            -moz-text-overflow: ellipsis;
+            -webkit-text-overflow: ellipsis;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">Spark</a>
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/sparkweb1/home.html">电影</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/sparkweb1/search.html">搜索</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/sparkweb1/typeScore.html">类别评分</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+
+<div class="container mar">
+    <table class="table">
+        <thead>
+        <tr >
+            <th>电影名字</th>
+            <th>电影类型</th>
+        </tr>
+        </thead>
+        <tbody id="info">
+            <tr>
+                <td> 数据正在加载中...</td>
+                <td> 1</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+<script type="text/javascript" src="https://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+<script type="text/javascript">
+    var fuwuqiurl="http://119.3.167.84:8080/sparkweb1/test"
+    //fuwuqiurl="http://localhost:8080/test"
+    $(document).ready(function() {
+        $.ajax({
+            url : fuwuqiurl,//
+            dataType : "json",//数据格式
+            type : "post",//请求方式
+            async : true,//是否异步请求
+            success : function(data) {   //如果请求成功，返回数据。
+                $("#info").html("")//清空info内容
+                $.each(data.list,function(i,item){
+                    var url="http://119.3.167.84:8080/sparkweb1/movie.html?name="+item.name
+                    $("#info").append(
+                        "<tr>"+
+                        "<td>" +
+                        "<a href='"+url+"'>"+item.name+"</a>"+
+                        "</td>" +
+                        "<td>" +item.type+ "</td>" +
+                        "<tr>"
+                    );
+                });
+            }
+        })
+    })
+</script>
+
+</html>

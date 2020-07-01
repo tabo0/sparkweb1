@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>typeScore</title>
+    <link rel="icon" href="myico.ico" type="image/x-icon" />
+    <script src="http://code.jquery.com/jquery-1.4.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.staticfile.org/popper.js/1.12.5/umd/popper.min.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/4.1.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="#">Spark</a>
+
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/sparkweb1/home.html">电影</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/sparkweb1/search.html">搜索</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/sparkweb1/typeScore.html">类别评分</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+
+<div id="main" style="height:400px;"></div>
+<div class="container mt-3">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="输入类别,将男女性别对同类电影的平均分进行对比..." id="type">
+        <div class="input-group-append">
+            <button class="btn btn-success" onclick="return search()">go</button>
+        </div>
+    </div>
+</div>
+
+<div id="typeShow" style="width:600px; height:400px;"></div>
+<script>
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
+    var typeChart = echarts.init(document.getElementById('typeShow'));
+    // 指定图表的配置项和数据
+    var option = {
+        title: {
+            text: '类别得分柱状图'  // 柱状图标题，位于柱状图左上角。
+        },
+        tooltip: {},
+        legend: {
+            data:['分数']  // 此处数据无关紧要，不知道什么原因。
+        },
+        xAxis: {
+            data: ["Adventure","Animation"]  // x轴数据。
+        },
+        yAxis: {},
+        series: [{
+            name: '分数',  // 柱状图名字，位于柱状图的正上方。
+            type: 'bar',  // 柱状图。
+            data: [8,8.5]  // 此处数据，与x轴的数据一一对应。
+        }]
+    };
+
+    myChart.setOption(option);
+
+    $(document).ready(function() {
+        $.ajax({
+            url : "http://119.3.167.84:8080/sparkweb1/typeScore",//
+            dataType : "json",//数据格式
+            type : "post",//请求方式
+            async : true,//是否异步请求
+            success : function(data) {   //如果请求成功，返回数据。
+                myChart.setOption({
+                    xAxis:{
+                        data:data.nameList
+                    },
+                    series: [{
+                        name: '分数',  // 柱状图名字，位于柱状图的正上方。
+                        type: 'bar',  // 柱状图。
+                        data: data.scoreList
+                    }]
+                });
+            }
+        })
+    })
+
+    function  search(){
+        var str =$('#type').val();
+        var path="http://119.3.167.84:8080/sparkweb1/gettypeCompare?msg="+str
+        $.ajax({
+            url : path,//
+            dataType : "json",//数据格式
+            type : "post",//请求方式
+            async : true,//是否异步请求
+            success : function(data) {   //如果请求成功，返回数据。
+                typeChart.setOption({
+                    title: {
+                        text: '对比柱状图'  // 柱状图标题，位于柱状图左上角。
+                    },
+                    tooltip: {},
+                    legend: {
+                        data:['分数']  // 此处数据无关紧要，不知道什么原因。
+                    },
+                    xAxis: {
+                        data: data.nameList
+                    },
+                    yAxis: {},
+                    series: [{
+                        name: '分数',  // 柱状图名字，位于柱状图的正上方。
+                        type: 'bar',  // 柱状图。
+                        data: data.scoreList
+                    }]
+                });
+            }
+        })
+    }
+</script>
+</body>
+</html>

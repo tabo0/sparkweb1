@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+    <constant name="struts.i18n.encoding" value="UTF-8"></constant>
+    <package name="1" namespace="/" extends="struts-default">
+        <action name="home" class="action.testAction" method="test">
+            <result name="success">home.jsp</result>
+        </action>
+    </package>
+    <package name="basicstruts" extends="struts-default,json-default">
+        <action name="index">
+            <result>index.jsp</result>
+        </action>
+        <action name="test" class="action.testAction" method="test">
+            <result name="success" type="json">
+                <param name="root">list</param>
+            </result>
+        </action>
+        <action name="test1" class="action.testAction" method="test1">
+        <result name="success" type="json">
+            <param name="root">list</param>
+        </result>
+    </action>
+        <action name="test2" class="action.testAction" method="test2">
+            <result name="success" type="json">
+                <param name="root">list</param>
+            </result>
+        </action>
+        <action name="search" class="action.testAction" method="search">
+            <result name="success" type="json">
+                <param name="root">list</param>
+            </result>
+        </action>
+        <action name="typeScore" class="action.testAction" method="gettypeScore">
+            <result name="success" type="json">
+                <param name="root">Scorelist</param>
+            </result>
+        </action>
+        <action name="put" class="action.testAction" method="put">
+        <result name="success" type="json">
+            <param name="root">list</param>
+        </result>
+    </action>
+        <action name="gettypeCompare" class="action.testAction" method="gettypeCompare">
+            <result name="success" type="json">
+                <param name="root">Scorelist</param>
+            </result>
+        </action>
+        <action name="getMovieScore" class="action.testAction" method="getMovieScore">
+            <result name="success" type="json">
+                <param name="root">Scorelist</param>
+            </result>
+        </action>
+    </package>
+</struts>
